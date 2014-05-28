@@ -121,11 +121,12 @@ public class FunWithArraysAndStrings {
 		if(number == 0){
 			return "0";
 		}
-		
-		String retVal = "";
+
 		int num = number;
 		int num_nearest_tenth, num_tenth;
 		boolean isNegative = false;
+		
+		StringBuffer sb = new StringBuffer();
 		
 		//set the negative flag if necessary
 		if(num < 0){
@@ -139,16 +140,18 @@ public class FunWithArraysAndStrings {
 			num_tenth = num/10;
 			num_nearest_tenth = num_tenth * 10;
 			int lastDigit = num - num_nearest_tenth;
-			retVal = lastDigit + retVal;
+			sb.append(lastDigit);
 			num = num_tenth;
 		}
 		
 		//if its a negative number, we need to add the sign at the beginning
 		if(isNegative){
-			retVal = "-" + retVal;
+			sb.append("-");
 		}
 		
-		return retVal;
+		//the string buffer is in reverse order, so we need to reverse it again
+		sb.reverse();
+		return sb.toString();
 	}
 	
 	/**
