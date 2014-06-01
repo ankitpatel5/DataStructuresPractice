@@ -56,6 +56,9 @@ public class RecursionFun {
 	
 	/**
 	 * Prints out all the permutations of a word
+	 * 
+	 * E.g. "ABC" would give us "ABC, ACB, BAC, BCA, CAB, CBA"
+	 * 
 	 * @param word Word to permute
 	 */
 	public void printWordPermutations(String word){
@@ -101,7 +104,39 @@ public class RecursionFun {
 		}
 	}
 	
-	
+	/**
+	 * Prints all possible combinations of the characters in a string.
+	 * These combinations range in length from one to the length of the string.
+	 * 
+	 * Two combinations that differ only in ordering of their characters are the same combinations.
+	 * (e.g. "12" and "31" are different combinations from the input string "123", but "12" is the same as "21"
+	 * 
+	 * E.g. "ABC" would give "A AB, ABC, AC, B, BC, C"
+	 * 
+	 * @param word
+	 */
+	public void printWordCombination(String word){
+		
+		if("".equals(word)){
+			System.out.println("");
+		}
+		
+		char[] wordArr = word.toCharArray();
+		StringBuilder sb = new StringBuilder();
+		combineWord(wordArr, sb, 0);		
+	}
+
+	private void combineWord(char[] wordArr, StringBuilder sb, int i) {
+		for(int currPos = i; currPos<wordArr.length; currPos++){
+			sb.append(String.valueOf(wordArr[currPos]));
+			System.out.println(sb.toString());
+			
+			if(currPos+1 < wordArr.length){
+				combineWord(wordArr, sb, currPos + 1);
+			}
+			sb.setLength(sb.length() -1);
+		}
+	}
 
 	/**
 	 * Playground for testing
@@ -114,8 +149,16 @@ public class RecursionFun {
 		System.out.println("Finding 40 in [5,10,40,70,100,5000,60000,1000000]: Index " +  recursiveTest.binarySearch(new int[]{5,10,40,70,100,5000,60000,1000000}, 0, 7, 40));
 		System.out.println("Finding 1 in [1]: Index " +  recursiveTest.binarySearch(new int[]{1}, 0, 0, 1));
 		
+		System.out.println("All permutations of abc: ");
 		recursiveTest.printWordPermutations("abc");
+		
+		System.out.println("\nAll permutations of ABCD: ");
 		recursiveTest.printWordPermutations("ABCD");
+		
+		System.out.println("\nAll combinations of abc: ");
+		recursiveTest.printWordCombination("wxyz");
+		
+		
 		
 	
 	}
