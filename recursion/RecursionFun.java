@@ -1,6 +1,9 @@
 package recursion;
 
-import org.omg.CORBA.UserException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+
 
 /**
  * 
@@ -20,6 +23,28 @@ public class RecursionFun {
 	 * @return The index of the value in the array
 	 * @throws Exception 
 	 */
+	
+	HashMap<Integer, char[]> telephoneChars = new LinkedHashMap<Integer, char[]>();
+	
+	public RecursionFun(){
+		
+		/**
+		 * Initialize the telephone digit to character mapping
+		 */
+		telephoneChars.put(1, new char[]{'1'});
+		telephoneChars.put(2, new char[]{'A','B','C'});
+		telephoneChars.put(3, new char[]{'D','E','F'});
+		telephoneChars.put(4, new char[]{'G','H','I'});
+		telephoneChars.put(5, new char[]{'J','K','L'});
+		telephoneChars.put(6, new char[]{'M','N','O'});
+		telephoneChars.put(7, new char[]{'P','R','S'});
+		telephoneChars.put(8, new char[]{'T','U','V'});
+		telephoneChars.put(9, new char[]{'W','X','Y'});
+		telephoneChars.put(0, new char[]{'0'});
+		                       
+	}
+	
+	
 	public int binarySearch(int[] arr, int start, int end, int value) throws Exception{
 		
 		/**
@@ -130,12 +155,116 @@ public class RecursionFun {
 		for(int currPos = i; currPos<wordArr.length; currPos++){
 			sb.append(String.valueOf(wordArr[currPos]));
 			System.out.println(sb.toString());
-			
-			if(currPos+1 < wordArr.length){
-				combineWord(wordArr, sb, currPos + 1);
-			}
+			combineWord(wordArr, sb, currPos + 1);
 			sb.setLength(sb.length() -1);
 		}
+	}
+
+	/**
+	 * Prints all of the "words" or combinations of letters that can represent the given number
+	 * @param number A phone number
+	 */
+	public void printTelephoneWords(int[] number){
+		
+		if(number.length == 0){
+			System.out.println("");
+			return;
+		}
+		
+		int mapIndex = 0; 	//represents the index of interest in telephoneChars
+		int numIndex = 0; 	//represents the the current digit to process from the input number
+		StringBuilder sb = new StringBuilder();
+		
+		permuteTelephoneWords(number, sb, mapIndex, numIndex);
+	}
+	
+	private void permuteTelephoneWords(int[] number, StringBuilder sb,
+			int mapIndex, int numIndex) {
+		if(numIndex == number.length){
+			System.out.println(sb.toString());
+			return;
+		}
+		
+		int numOfVariations = telephoneChars.get(number[numIndex]).length;
+		for(int j=mapIndex; j<numOfVariations;j++){
+			sb.append(telephoneChars.get(number[numIndex])[j]);
+			permuteTelephoneWords(number, sb, 0, numIndex+1);
+			sb.setLength(sb.length()-1);
+		}
+		
+	}
+
+	/**
+	 * Prints all of the "words" or combinations of letters that can represent the given number
+	 * Implemented with no recursion
+	 * @param number A phone number
+	 */
+	public void printTelephoneWordsNoRecursion(int[] number){
+		
+		final int NUMBER_LENGTH = number.length;
+		
+		if(NUMBER_LENGTH == 0){
+			System.out.println("");
+			return;
+		}
+		
+		//form first word
+		char[] combination = new char[NUMBER_LENGTH];
+		for(int i=0; i< NUMBER_LENGTH; i++){
+			combination[i] = getCharKey(number[i], 1);
+		}
+		
+		/**
+		 * Loop to form rest of the combinations by
+		 * starting from the right and moving to the left.
+		 */
+		while(true){
+			
+			//print current combinations
+			for(int i=0; i<NUMBER_LENGTH; i++){
+				System.out.print(combination[i]);
+			}
+			System.out.println();
+			
+			for(int j=NUMBER_LENGTH-1; j>=0; j--){
+				//case: if its the last alphabetic mapping, go back to the first
+				if(combination[j] == '1' || combination[j] == '0' || 
+						combination[j] == getCharKey(number[j], 3)){
+					
+					//if its the first digit that needs to go back to the first alphabet mapping
+					//we have hit the end
+					if(j == 0){
+						return;
+					}
+					combination[j] = getCharKey(number[j], 1);
+				}
+				//case: if its the 1st alphabetic mapping, go to the next one
+				else if(combination[j] == getCharKey(number[j], 1)){
+					combination[j] = getCharKey(number[j], 2);
+					break;
+				}
+				//case: if its the 2nd alphabetic mapping, go to the next one
+				else if(combination[j] == getCharKey(number[j], 2)){
+					combination[j] = getCharKey(number[j], 3);
+					break;
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * Helper method to return the alphabetic character matched to a telephone digit 
+	 * based on which place the caller wants
+	 * e.g. 2 is mapped to "ABC" If the caller wants the 1st place, it will return
+	 * "A", 2nd will return "B", and so on.
+	 * 
+	 * @param telephoneKey	Telephone digit
+	 * @param place Which alphabetic mapping is being requested
+	 * @return
+	 */
+	private char getCharKey(int telephoneKey, int place){
+		return telephoneChars.get(telephoneKey)[place-1];
 	}
 
 	/**
@@ -158,8 +287,17 @@ public class RecursionFun {
 		System.out.println("\nAll combinations of abc: ");
 		recursiveTest.printWordCombination("wxyz");
 		
+		System.out.println("\nAll telephone character combinations for 497-1927: ");
+		recursiveTest.printTelephoneWords(new int[]{4,9,7,1,9,2,7});
 		
-		
+		System.out.println("\nAll telephone character combinations for 101-2101: ");
+		recursiveTest.printTelephoneWords(new int[]{1,0,1,2,1,0,1});
+
+		System.out.println("\nAll telephone character combinations (no recursion) for 497-1927: ");
+		recursiveTest.printTelephoneWordsNoRecursion(new int[]{4,9,7,1,9,2,7});
+
+		System.out.println("\nAll telephone character combinations (no recursion) for 101-2101: ");
+		recursiveTest.printTelephoneWordsNoRecursion(new int[]{1,0,1,2,1,0,1});
 	
 	}
 
