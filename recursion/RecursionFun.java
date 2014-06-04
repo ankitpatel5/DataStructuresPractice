@@ -10,18 +10,6 @@ import java.util.LinkedHashMap;
  *
  */
 public class RecursionFun {
-
-	/**
-	 * Finds the index of a value of interest within a sorted integer array using
-	 * binary search in a recursive manner.
-	 * 
-	 * @param arr The given sorted integer array
-	 * @param start The index to start the search from (inclusive)
-	 * @param end The index to end the search at (inclusive)
-	 * @param value	The value to be searched
-	 * @return The index of the value in the array
-	 * @throws Exception 
-	 */
 	
 	HashMap<Integer, char[]> telephoneChars = new LinkedHashMap<Integer, char[]>();
 	
@@ -42,8 +30,18 @@ public class RecursionFun {
 		telephoneChars.put(0, new char[]{'0'});
 		                       
 	}
-	
-	
+
+	/**
+	 * Finds the index of a value of interest within a sorted integer array using
+	 * binary search in a recursive manner.
+	 * 
+	 * @param arr The given sorted integer array
+	 * @param start The index to start the search from (inclusive)
+	 * @param end The index to end the search at (inclusive)
+	 * @param value	The value to be searched
+	 * @return The index of the value in the array
+	 * @throws Exception 
+	 */
 	public int binarySearch(int[] arr, int start, int end, int value) throws Exception{
 		
 		/**
